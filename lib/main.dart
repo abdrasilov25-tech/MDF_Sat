@@ -1,4 +1,20 @@
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+Future<List<Facade>> fetchFacades() async {
+  final response = await http.get(Uri.parse('https://mocki.io/v1/5a8c78d0-3c5c-4b7e-9d2f-1f6a4f5b2f9e'));
+
+  if (response.statusCode == 200) {
+    List jsonData = jsonDecode(response.body);
+    return jsonData.map((item) => Facade.fromJson(item)).toList();
+  } else {
+    throw Exception('Ошибка загрузки фасадов');
+  }
+}
+
+
 
 void main() {
   runApp(const MyApp());
@@ -146,6 +162,21 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+class Facade {
+  final String name;
+  final String image;
+  final int price;
+
+  Facade({required this.name, required this.image, required this.price});
+
+  factory Facade.fromJson(Map<String, dynamic> json) {
+    return Facade(
+      name: json['name'],
+      image: json['image'],
+      price: json['price'],
     );
   }
 }
