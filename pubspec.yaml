@@ -25,7 +25,12 @@ flutter:
 
   assets:
     - assets/logo.png  # твой логотип
-    - assets/icon.png  # иконка приложения
+    - assets/icon.png
+    - assets/fasad1.png
+    - assets/fasad2.png
+    - assets/fasad3.png
+    - assets/fasad4.png
+    - assets/fasad5.png 
 
 flutter_icons:
   android: true

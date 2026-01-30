@@ -1,25 +1,11 @@
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-Future<List<Facade>> fetchFacades() async {
-  final response = await http.get(Uri.parse('https://mocki.io/v1/5a8c78d0-3c5c-4b7e-9d2f-1f6a4f5b2f9e'));
-
-  if (response.statusCode == 200) {
-    List jsonData = jsonDecode(response.body);
-    return jsonData.map((item) => Facade.fromJson(item)).toList();
-  } else {
-    throw Exception('Ошибка загрузки фасадов');
-  }
-}
-
-
 
 void main() {
   runApp(const MyApp());
 }
 
+// ================= Главный виджет =================
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -32,6 +18,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// ================= Экран логина =================
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -56,10 +43,10 @@ class _LoginPageState extends State<LoginPage> {
               fit: BoxFit.cover,
             ),
           ),
-          // Прозрачная тёмная накладка
+          // Прозрачная накладка
           Positioned.fill(
             child: Container(
-              color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.3), // ✅ исправлено
+              color: Colors.black.withOpacity(0.3),
             ),
           ),
           // Контент
@@ -70,61 +57,69 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'Мдф фасады',
+                    'МДФ Фасады',
                     style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 6, 13, 7),
-                    ),
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   TextField(
-                    onChanged: (value) {
-                      login = value;
-                    },
+                    onChanged: (value) => login = value,
                     decoration: const InputDecoration(
                       labelText: 'Логин',
-                      filled: true,
-                      fillColor: Colors.white70,
                       border: OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 15),
                   TextField(
                     obscureText: true,
-                    onChanged: (value) {
-                      password = value;
-                    },
+                    onChanged: (value) => password = value,
                     decoration: const InputDecoration(
                       labelText: 'Пароль',
-                      filled: true,
-                      fillColor: Colors.white70,
                       border: OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                     if (login == 'beksultan' && password == '1234') {
+                      if (login.trim() == 'beksultan' &&
+                          password.trim() == '1234') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const FacadesPage()),
+                        );
+                      } else {
+                        setState(() {
+                          message = '❌ Неправильный логин или пароль';
+                        });
+                      }
+                    },
+                    child: const Text('Войти'),
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50)),
+                  ),
+                  const SizedBox(height: 15),
+                  OutlinedButton(
+                    onPressed: () {
+                      // Переход к экрану регистрации по телефону
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-
-                      builder: (context) => const HomePage(),
-        ),
-      );
-    } else {
-      setState(() {
-        message = '❌ ОШИБКА';
-      });
-    }
-  },
-  child: const Text('Войти'),
-),
+                            builder: (context) =>
+                                const RegistrationPhonePage()),
+                      );
+                    },
+                    child: const Text('Зарегистрироваться'),
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                        side: const BorderSide(color: Colors.white)),
+                  ),
                   const SizedBox(height: 20),
                   Text(
                     message,
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
+                    style: const TextStyle(fontSize: 18, color: Colors.red),
                   ),
                 ],
               ),
@@ -135,29 +130,80 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+
+// ================= Экран регистрации по телефону =================
+class RegistrationPhonePage extends StatefulWidget {
+  const RegistrationPhonePage({super.key});
+
+  @override
+  State<RegistrationPhonePage> createState() => _RegistrationPhonePageState();
+}
+
+class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
+  String message = '';
+  String sentCode = ''; // код, который мы "отправляем" для проверки
+
+  void sendCode() {
+    // Здесь можно интегрировать реальный SMS сервис (например Firebase)
+    sentCode = '1234'; // симуляция
+    setState(() {
+      message = 'На номер ${phoneController.text} отправлен код: $sentCode';
+    });
+  }
+
+  void verifyCode() {
+    if (codeController.text == sentCode) {
+      setState(() {
+        message = '✅ Регистрация успешна!';
+      });
+    } else {
+      setState(() {
+        message = '❌ Неверный код';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Главная'),
-      ),
-      body: Center(
+      appBar: AppBar(title: const Text('Регистрация по телефону')),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Бацок ты в теме 🚀',
-              style: TextStyle(fontSize: 24),
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                labelText: 'Введите номер телефона',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: sendCode,
+              child: const Text('Отправить код'),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: codeController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Введите код',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: verifyCode,
+              child: const Text('Подтвердить код'),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context); // выйти назад
-              },
-              child: const Text('Выйти'),
+            Text(
+              message,
+              style: const TextStyle(fontSize: 16, color: Colors.green),
             ),
           ],
         ),
@@ -165,18 +211,17 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-class Facade {
-  final String name;
-  final String image;
-  final int price;
 
-  Facade({required this.name, required this.image, required this.price});
+// ================= Экран фасадов =================
+class FacadesPage extends StatelessWidget {
+  const FacadesPage({super.key});
 
-  factory Facade.fromJson(Map<String, dynamic> json) {
-    return Facade(
-      name: json['name'],
-      image: json['image'],
-      price: json['price'],
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Фасады')),
+      body: const Center(child: Text('Здесь будет список фасадов')),
     );
   }
 }
+
