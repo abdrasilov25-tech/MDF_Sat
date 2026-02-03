@@ -218,9 +218,93 @@ class FacadesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> facades = [
+      {'image': 'assets/fasad1.png', 'name': 'Рефленый'},
+      {'image': 'assets/fasad2.png', 'name': 'Минимализм'},
+      {'image': 'assets/fasad3.png', 'name': 'Рис:026'},
+      {'image': 'assets/fasad4.png', 'name': 'Рис:027'},
+      {'image': 'assets/fasad5.png', 'name': 'Рис:Выборка'},
+    ];
+
     return Scaffold(
       appBar: AppBar(title: const Text('Фасады')),
-      body: const Center(child: Text('Здесь будет список фасадов')),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 0.8, // чуть выше для текста под картинкой
+        ),
+        itemCount: facades.length,
+        itemBuilder: (context, index) {
+          final facade = facades[index];
+          return GestureDetector(
+            onTap: () {
+              // Можно открыть детальный экран фасада
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FacadeDetailPage(
+                    image: facade['image']!,
+                    name: facade['name']!,
+                  ),
+                ),
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      facade['image']!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  facade['name']!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ================= Экран деталей фасада =================
+class FacadeDetailPage extends StatelessWidget {
+  final String image;
+  final String name;
+
+  const FacadeDetailPage({super.key, required this.image, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(name)),
+      body: Column(
+        children: [
+          Expanded(
+            child: Image.asset(image, fit: BoxFit.cover),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // Здесь можно добавить логику заказа фасада
+            },
+            child: const Text('Заказать'),
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }

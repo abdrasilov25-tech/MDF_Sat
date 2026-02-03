@@ -1,4 +1,4 @@
-name: MDF_Sat
+name: mdf_sat
 description: Приложение для просмотра и заказа МДФ фасадов.
 
 publish_to: 'none'
