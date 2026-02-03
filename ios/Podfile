@@ -1,15 +1,25 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '13.0'
+# Поддерживаемая версия iOS
+platform :ios, '13.0'
 
+# Используем динамические фреймворки и modular headers для Firebase
+use_frameworks!
+use_modular_headers!
+
+# Целевая сборка приложения
 target 'Runner' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
+  # Подключаем Flutter
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
-  # Pods for Runner
-
+  # Поддержка тестов (если нужны)
   target 'RunnerTests' do
     inherit! :search_paths
-    # Pods for testing
+    # Pods для тестов
   end
+end
 
+# Не трогай это, нужно для Flutter
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+  end
 end
