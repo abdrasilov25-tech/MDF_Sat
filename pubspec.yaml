@@ -11,26 +11,28 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
   flutter_launcher_icons: ^0.14.4
-  http: ^1.2.0  # пакет для работы с API
+  http: ^1.2.1
+  firebase_core: ^4.4.0
+  firebase_auth: ^6.1.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/logo.png  # твой логотип
+    - assets/logo.png
     - assets/icon.png
     - assets/fasad1.png
     - assets/fasad2.png
     - assets/fasad3.png
     - assets/fasad4.png
-    - assets/fasad5.png 
+    - assets/fasad5.png
 
 flutter_icons:
   android: true
