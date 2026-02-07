@@ -1,8 +1,23 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Image.asset('assets/logo.png')
+            .animate()
+            .fadeIn(duration: 1000.ms) // плавное появление
+            .scale(duration: 800.ms, curve: Curves.easeOut),
+      ),
+    );
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,21 +87,35 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 30),
                   TextField(
-                    onChanged: (value) => login = value,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
+  onChanged: (value) => login = value,
+  style: const TextStyle(color: Colors.white), // ← ВОТ ЭТО
+  decoration: const InputDecoration(
+    labelText: 'Email',
+    labelStyle: TextStyle(color: Colors.white70),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.white54),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.deepPurpleAccent),
+    ),
+  ),
+),
                   const SizedBox(height: 15),
                   TextField(
-                    obscureText: true,
-                    onChanged: (value) => password = value,
-                    decoration: const InputDecoration(
-                      labelText: 'Пароль',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
+  obscureText: true,
+  onChanged: (value) => password = value,
+  style: const TextStyle(color: Colors.white),
+  decoration: const InputDecoration(
+    labelText: 'Пароль',
+    labelStyle: TextStyle(color: Colors.white70),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.white54),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.deepPurpleAccent),
+    ),
+  ),
+),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
@@ -189,47 +218,80 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Регистрация через Email')),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color.fromARGB(255, 38, 214, 29), // фон страницы
+    appBar: AppBar(
+      title: const Text('Регистрация через Email'),
+      backgroundColor: const Color.fromARGB(255, 183, 100, 58), // цвет AppBar
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        children: [
+          // Email
+          TextField(
+            controller: emailController,
+            style:  const TextStyle(color: Color.fromARGB(255, 40, 169, 26)), // цвет вводимого текста
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              labelStyle: TextStyle(color: Colors.white70), // цвет подсказки
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white54),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepPurpleAccent),
               ),
             ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Пароль',
-                border: OutlineInputBorder(),
+          ),
+          const SizedBox(height: 15),
+
+          // Пароль
+          TextField(
+            controller: passwordController,
+            obscureText: true,
+            style: const TextStyle(color: Colors.white),
+            decoration: const InputDecoration(
+              labelText: 'Пароль',
+              labelStyle: TextStyle(color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white54),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.deepPurpleAccent),
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: register,
-              child: const Text('Зарегистрироваться'),
-              style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50)),
+          ),
+          const SizedBox(height: 20),
+
+          // Кнопка регистрации
+          ElevatedButton(
+            onPressed: register,
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 50),
+              backgroundColor: Colors.deepPurpleAccent,
             ),
-            const SizedBox(height: 20),
-            Text(
-              message,
-              style: TextStyle(
-                  color: message.startsWith('✅') ? Colors.green : Colors.red,
-                  fontSize: 16),
+            child: const Text('Зарегистрироваться', style: TextStyle(fontSize: 18)),
+          ),
+          const SizedBox(height: 20),
+
+          // Сообщение об ошибке или успехе
+          Text(
+            message,
+            style: TextStyle(
+              color: message.isEmpty
+                  ? Colors.white54 // базовый цвет
+                  : (message.startsWith('✅')
+                      ? Colors.greenAccent
+                      : Colors.redAccent),
+              fontSize: 16,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 // ================= Экран регистрации по телефону =================
@@ -329,7 +391,7 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
               message,
               style: TextStyle(
                   fontSize: 16,
-                  color: message.startsWith('✅') ? Colors.green : Colors.red),
+                  color: message.startsWith('✅') ? const Color.fromARGB(255, 150, 175, 76) : Colors.red),
             ),
           ],
         ),
@@ -381,14 +443,26 @@ class FacadesPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      facade['image']!,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+  child: Animate(
+    effects: [
+      FadeEffect(duration: 500.ms, delay: Duration(milliseconds: index * 100)),
+      SlideEffect(
+        begin: const Offset(0, 0.5),
+        end: Offset.zero,
+        curve: Curves.easeOut,
+        duration: 600.ms,
+        delay: Duration(milliseconds: index * 100),
+      ),
+    ],
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.asset(
+        facade['image']!,
+        fit: BoxFit.cover,
+      ),
+    ),
+  ),
+),
                 const SizedBox(height: 8),
                 Text(
                   facade['name']!,
