@@ -470,38 +470,42 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const FacadesPage()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 80),
-                    backgroundColor: Colors.deepPurpleAccent,
-                  ),
-                  child: const Text(
-                    'Фасады',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const FacadesPage()),
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    minimumSize: const Size(double.infinity, 80),
+    backgroundColor: Colors.transparent, // прозрачный фон
+    shadowColor: Colors.transparent, // убираем тень
+    side: BorderSide(color: Colors.black), // можно добавить рамку, если нужно
+  ),
+  child: const Text(
+    'Фасады',
+    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black), // черный текст
+  ),
+),
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const FurniturePage()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 80),
-                    backgroundColor: Colors.deepPurpleAccent,
-                  ),
-                  child: const Text(
-                    'Корпусная мебель',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const FurniturePage()),
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    minimumSize: const Size(double.infinity, 80),
+    backgroundColor: Colors.transparent,
+    shadowColor: Colors.transparent,
+    side: BorderSide(color: Colors.black),
+  ),
+  child: const Text(
+    'Корпусная мебель',
+    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+  ),
+),
               ],
             ),
           ),
