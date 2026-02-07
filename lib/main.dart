@@ -78,28 +78,29 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'МДФ Фасады',
-                    style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
+                  Text(
+  'МДФ Фасады',
+  style:  TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  ),
+)
+.animate()
+.fadeIn(duration: 600.ms)
+.slideY(begin: -0.3),
                   const SizedBox(height: 30),
                   TextField(
   onChanged: (value) => login = value,
-  style: const TextStyle(color: Colors.white), // ← ВОТ ЭТО
+  style: const TextStyle(color: Colors.white),
   decoration: const InputDecoration(
     labelText: 'Email',
-    labelStyle: TextStyle(color: Colors.white70),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white54),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.deepPurpleAccent),
-    ),
+    border: OutlineInputBorder(),
   ),
-),
+)
+.animate()
+.fadeIn(delay: 200.ms)
+.slideY(begin: 0.3),
                   const SizedBox(height: 15),
                   TextField(
   obscureText: true,
@@ -107,41 +108,34 @@ class _LoginPageState extends State<LoginPage> {
   style: const TextStyle(color: Colors.white),
   decoration: const InputDecoration(
     labelText: 'Пароль',
-    labelStyle: TextStyle(color: Colors.white70),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white54),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.deepPurpleAccent),
-    ),
+    border: OutlineInputBorder(),
   ),
-),
+)
+.animate()
+.fadeIn(delay: 350.ms)
+.slideY(begin: 0.3),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () async {
-                      // Вход через Email/Password
-                      try {
-                        UserCredential userCredential = await FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                                email: login.trim(),
-                                password: password.trim());
-                        setState(() {
-                          message = '✅ Успешный вход: ${userCredential.user?.email}';
-                        });
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const FacadesPage()),
-                        );
-                      } on FirebaseAuthException catch (e) {
-                        setState(() {
-                          message = '❌ Ошибка входа: ${e.message}';
-                        });
-                      }
-                    },
-                    child: const Text('Войти'),
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50)),
-                  ),
+  onPressed: () {
+    if (login.trim() == 'bbb' && password.trim() == '000') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } else {
+      setState(() {
+        message = '❌ Неверный логин или пароль';
+      });
+    }
+  },
+  style: ElevatedButton.styleFrom(
+    minimumSize: const Size(double.infinity, 50),
+  ),
+  child: const Text('Войти'),
+)
+.animate()
+.fadeIn(delay: 500.ms)
+.scale(begin: const Offset(0.95, 0.95)),
                   const SizedBox(height: 15),
                   OutlinedButton(
                     onPressed: () {
@@ -173,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20),
                   Text(
                     message,
-                    style: const TextStyle(fontSize: 18, color: Colors.red),
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ],
               ),
@@ -220,10 +214,10 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
   @override
 Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: const Color.fromARGB(255, 38, 214, 29), // фон страницы
+    backgroundColor: Colors.white, // однотонный белый фон
     appBar: AppBar(
       title: const Text('Регистрация через Email'),
-      backgroundColor: const Color.fromARGB(255, 183, 100, 58), // цвет AppBar
+      backgroundColor: Colors.deepPurpleAccent, // можно оставить ярким
     ),
     body: Padding(
       padding: const EdgeInsets.all(24),
@@ -232,15 +226,15 @@ Widget build(BuildContext context) {
           // Email
           TextField(
             controller: emailController,
-            style:  const TextStyle(color: Color.fromARGB(255, 40, 169, 26)), // цвет вводимого текста
-            decoration: const InputDecoration(
+            style: const TextStyle(color: Colors.black), // текст чёрный
+            decoration: InputDecoration(
               labelText: 'Email',
-              labelStyle: TextStyle(color: Colors.white70), // цвет подсказки
+              labelStyle: TextStyle(color: Colors.grey[700]), // подсказка серой
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white54),
+                borderSide: BorderSide(color: Colors.grey[400]!), // рамка серой
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.deepPurpleAccent),
+                borderSide: BorderSide(color: Colors.deepPurpleAccent), // рамка при фокусе
               ),
             ),
           ),
@@ -250,12 +244,12 @@ Widget build(BuildContext context) {
           TextField(
             controller: passwordController,
             obscureText: true,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
+            style: const TextStyle(color: Colors.black),
+            decoration: InputDecoration(
               labelText: 'Пароль',
-              labelStyle: TextStyle(color: Colors.white70),
+              labelStyle: TextStyle(color: Colors.grey[700]),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white54),
+                borderSide: BorderSide(color: Colors.grey[400]!),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.deepPurpleAccent),
@@ -280,10 +274,8 @@ Widget build(BuildContext context) {
             message,
             style: TextStyle(
               color: message.isEmpty
-                  ? Colors.white54 // базовый цвет
-                  : (message.startsWith('✅')
-                      ? Colors.greenAccent
-                      : Colors.redAccent),
+                  ? Colors.grey
+                  : (message.startsWith('✅') ? Colors.green : Colors.red),
               fontSize: 16,
             ),
           ),
@@ -291,8 +283,7 @@ Widget build(BuildContext context) {
       ),
     ),
   );
-}
-}
+}}
 
 // ================= Экран регистрации по телефону =================
 class RegistrationPhonePage extends StatefulWidget {
@@ -308,7 +299,7 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String message = '';
-  String _verificationId = ''; // для хранения ID, который возвращает Firebase
+  String _verificationId = '';
 
   void sendCode() async {
     String phone = phoneController.text.trim();
@@ -360,38 +351,90 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Регистрация по телефону')),
+      backgroundColor: Colors.white, // белый фон
+      appBar: AppBar(
+        title: const Text('Регистрация по телефону'),
+        backgroundColor: Colors.deepPurpleAccent,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
+            // ===== Ввод номера с регионом =====
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Введите номер телефона',
-                border: OutlineInputBorder(),
+              style: const TextStyle(color: Colors.black),
+              decoration: InputDecoration(
+                labelText: 'Номер телефона (с кодом страны)',
+                labelStyle: TextStyle(color: Colors.grey[700]),
+                prefixText: '+7 ', // можно изменить для региона
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey[400]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurpleAccent),
+                ),
               ),
             ),
             const SizedBox(height: 15),
-            ElevatedButton(onPressed: sendCode, child: const Text('Отправить код')),
-            const SizedBox(height: 15),
+
+            // ===== Ввод кода подтверждения =====
             TextField(
               controller: codeController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Введите код',
-                border: OutlineInputBorder(),
+              style: const TextStyle(color: Colors.black),
+              decoration: InputDecoration(
+                labelText: 'Код подтверждения',
+                labelStyle: TextStyle(color: Colors.grey[700]),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey[400]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.deepPurpleAccent),
+                ),
               ),
             ),
-            const SizedBox(height: 15),
-            ElevatedButton(onPressed: verifyCode, child: const Text('Подтвердить код')),
             const SizedBox(height: 20),
+
+            // ===== Кнопки =====
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: sendCode,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size.fromHeight(50),
+                    ),
+                    child: const Text('Отправить код', style: TextStyle(fontSize: 16)),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: verifyCode,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size.fromHeight(50),
+                    ),
+                    child: const Text('Подтвердить', style: TextStyle(fontSize: 16)),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 20),
+
+            // ===== Сообщение =====
             Text(
               message,
               style: TextStyle(
-                  fontSize: 16,
-                  color: message.startsWith('✅') ? const Color.fromARGB(255, 150, 175, 76) : Colors.red),
+                fontSize: 16,
+                color: message.isEmpty
+                    ? Colors.grey
+                    : (message.startsWith('✅') ? Colors.green : Colors.red),
+              ),
             ),
           ],
         ),
@@ -400,7 +443,75 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
   }
 }
 
-// ================= Экран фасадов =================
+// ================= Главная страница =================
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          // ===== Фон =====
+          Positioned.fill(
+            child: Image.asset(
+              'assets/bb.png', // твой фон
+              fit: BoxFit.cover,
+            ),
+          ),
+          // ===== Полупрозрачная накладка для контраста =====
+          Positioned.fill(
+            child: Container(color: Colors.black.withOpacity(0.3)),
+          ),
+          // ===== Контент =====
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const FacadesPage()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 80),
+                    backgroundColor: Colors.deepPurpleAccent,
+                  ),
+                  child: const Text(
+                    'Фасады',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const FurniturePage()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 80),
+                    backgroundColor: Colors.deepPurpleAccent,
+                  ),
+                  child: const Text(
+                    'Корпусная мебель',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ================= Фасады =================
 class FacadesPage extends StatelessWidget {
   const FacadesPage({super.key});
 
@@ -443,26 +554,14 @@ class FacadesPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-  child: Animate(
-    effects: [
-      FadeEffect(duration: 500.ms, delay: Duration(milliseconds: index * 100)),
-      SlideEffect(
-        begin: const Offset(0, 0.5),
-        end: Offset.zero,
-        curve: Curves.easeOut,
-        duration: 600.ms,
-        delay: Duration(milliseconds: index * 100),
-      ),
-    ],
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Image.asset(
-        facade['image']!,
-        fit: BoxFit.cover,
-      ),
-    ),
-  ),
-),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      facade['image']!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Text(
                   facade['name']!,
@@ -478,11 +577,10 @@ class FacadesPage extends StatelessWidget {
   }
 }
 
-// ================= Экран деталей фасада =================
+// ================= Детали фасада =================
 class FacadeDetailPage extends StatelessWidget {
   final String image;
   final String name;
-
   const FacadeDetailPage({super.key, required this.image, required this.name});
 
   @override
@@ -491,14 +589,100 @@ class FacadeDetailPage extends StatelessWidget {
       appBar: AppBar(title: Text(name)),
       body: Column(
         children: [
-          Expanded(
-            child: Image.asset(image, fit: BoxFit.cover),
-          ),
+          Expanded(child: Image.asset(image, fit: BoxFit.cover)),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {
-              // Логика заказа фасада
+            onPressed: () {},
+            child: const Text('Заказать'),
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+// ================= Корпусная мебель =================
+class FurniturePage extends StatelessWidget {
+  const FurniturePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Map<String, String>> furniture = [
+      {'image': 'assets/furniture1.png', 'name': 'Шкаф'},
+      {'image': 'assets/furniture2.png', 'name': 'Кухня'},
+      {'image': 'assets/furniture3.png', 'name': 'Комод'},
+      {'image': 'assets/furniture4.png', 'name': 'Стеллаж'},
+    ];
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Корпусная мебель')),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 0.8,
+        ),
+        itemCount: furniture.length,
+        itemBuilder: (context, index) {
+          final item = furniture[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FurnitureDetailPage(
+                    image: item['image']!,
+                    name: item['name']!,
+                  ),
+                ),
+              );
             },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      item['image']!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  item['name']!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ================= Детали мебели =================
+class FurnitureDetailPage extends StatelessWidget {
+  final String image;
+  final String name;
+  const FurnitureDetailPage({super.key, required this.image, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(name)),
+      body: Column(
+        children: [
+          Expanded(child: Image.asset(image, fit: BoxFit.cover)),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {},
             child: const Text('Заказать'),
           ),
           const SizedBox(height: 20),

@@ -34,6 +34,7 @@ flutter:
     - assets/fasad3.png
     - assets/fasad4.png
     - assets/fasad5.png
+    - assets/bb.png
 
 flutter_icons:
   android: true
